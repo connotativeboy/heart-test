@@ -43,5 +43,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           strict_host_key_checking: no
-          source: "./dist/*"
+          source: "./dist/"
           target: "/var/www/frontend/"
