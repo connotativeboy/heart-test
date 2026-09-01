@@ -1,13 +1,19 @@
 import { useNavigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
+
+interface LayoutProps {
+  /** 页面内容 */
+  children: ReactNode
+  /** 顶部导航栏标题 */
+  title?: string
+  /** 是否显示返回首页按钮（首页不显示） */
+  showBack?: boolean
+}
 
 /**
  * 全局布局组件：顶部导航栏 + 底部免责声明
- * @param {object} props
- * @param {React.ReactNode} props.children 页面内容
- * @param {string} props.title 顶部导航栏标题
- * @param {boolean} props.showBack 是否显示返回首页按钮（首页不显示）
  */
-export default function Layout({ children, title = '趣味测试', showBack = false }) {
+export default function Layout({ children, title = '趣味测试', showBack = false }: LayoutProps) {
   const navigate = useNavigate()
 
   return (

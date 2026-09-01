@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { FormEvent } from 'react'
 import { verifyCode, setToken } from '../api/api'
+
+interface AuthModalProps {
+  /** 当前测评 id */
+  testId: string
+  /** 关闭模态框回调 */
+  onClose: () => void
+}
 
 /**
  * 授权码模态框组件
@@ -9,18 +17,14 @@ import { verifyCode, setToken } from '../api/api'
  * - 校验通过保存 token 并跳转答题页 /quiz/:testId
  * - 校验失败展示错误提示（无效 / 已使用）
  * - loading 状态防止重复点击
- *
- * @param {object} props
- * @param {string} props.testId 当前测评 id
- * @param {function} props.onClose 关闭模态框回调
  */
-export default function AuthModal({ testId, onClose }) {
+export default function AuthModal({ testId, onClose }: AuthModalProps) {
   const navigate = useNavigate()
   const [authCode, setAuthCode] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     const code = authCode.trim()
     if (!code) {
@@ -34,14 +38,14 @@ export default function AuthModal({ testId, onClose }) {
     try {
       const res = await verifyCode(code)
       if (res && res.success) {
-        setToken(res.token)
+        setToken(res.token || '')
         navigate(`/quiz/${testId}`, { replace: true })
       } else {
         setError((res && res.msg) || '授权码无效')
       }
     } catch (err) {
       // 后端返回的错误信息（如授权码无效 / 已使用）
-      setError(err.message || '授权码无效')
+      setError(err instanceof Error ? err.message : '授权码无效')
     } finally {
       setLoading(false)
     }

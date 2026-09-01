@@ -1,10 +1,12 @@
+import type { Question, Report, TestDetail, TestItem } from '../types'
+
 /**
  * Mock 数据文件
  * 用于开发环境无后端时模拟接口返回
  */
 
 // 测评列表（分类、testId、名称、简介）
-export const tests = [
+export const tests: TestItem[] = [
   // ===== 性格 =====
   {
     testId: 'deep-desire',
@@ -81,7 +83,7 @@ export const tests = [
 ]
 
 // 测评详情（test/:testId）
-export const testDetails = {
+export const testDetails: Record<string, TestDetail> = {
   'deep-desire': {
     testId: 'deep-desire',
     name: '你深层欲望是什么？',
@@ -155,7 +157,7 @@ export const testDetails = {
 }
 
 // 题目（quiz/:testId）—— 通用题目模板，按 testId 生成
-const questionTemplates = [
+const questionTemplates: Question[] = [
   {
     id: 'q1',
     title: '面对压力时，你通常会怎么做？',
@@ -208,7 +210,7 @@ const questionTemplates = [
   },
 ]
 
-export function getQuiz(testId) {
+export function getQuiz(testId: string): Question[] {
   return questionTemplates.map((q, i) => ({
     ...q,
     id: `${testId}-q${i + 1}`,
@@ -216,7 +218,7 @@ export function getQuiz(testId) {
 }
 
 // 报告（get-report/:testId）
-export function getReport(testId) {
+export function getReport(testId: string): Report {
   const detail = testDetails[testId] || {}
   return {
     testId,

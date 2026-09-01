@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchTests } from '../api/api'
+import type { TestItem } from '../types'
 
 /**
  * 测评分类列表页组件（公开路由，无需授权码）
@@ -10,7 +11,7 @@ import { fetchTests } from '../api/api'
  */
 export default function TestList() {
   const navigate = useNavigate()
-  const [tests, setTests] = useState([])
+  const [tests, setTests] = useState<TestItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -28,7 +29,7 @@ export default function TestList() {
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err.message || '加载测评列表失败')
+        setError(err instanceof Error ? err.message : '加载测评列表失败')
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -40,7 +41,7 @@ export default function TestList() {
   }, [])
 
   // 按分类分组
-  const grouped = tests.reduce((acc, test) => {
+  const grouped = tests.reduce<Record<string, TestItem[]>>((acc, test) => {
     const cat = test.category || '其他'
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(test)

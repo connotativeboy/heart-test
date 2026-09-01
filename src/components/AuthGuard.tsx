@@ -1,6 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import { getToken, checkAuthStatus } from '../api/api'
+
+interface AuthGuardProps {
+  /** 受保护页面内容 */
+  children: ReactNode
+  /** 是否强限制校验授权码状态（仅答题页） */
+  requireAuthStatus?: boolean
+}
+
+interface GuardStatus {
+  checking: boolean
+  blocked: boolean
+}
 
 /**
  * 路由守卫组件
@@ -8,14 +21,10 @@ import { getToken, checkAuthStatus } from '../api/api'
  * - requireAuthStatus 为 true（/quiz 强限制路由）：
  *   额外调用后端 check-auth-status 校验授权码状态，
  *   若已使用则弹出提示并跳转到测评列表页
- *
- * @param {object} props
- * @param {React.ReactNode} props.children 受保护页面内容
- * @param {boolean} props.requireAuthStatus 是否强限制校验授权码状态（仅答题页）
  */
-export default function AuthGuard({ children, requireAuthStatus = false }) {
+export default function AuthGuard({ children, requireAuthStatus = false }: AuthGuardProps) {
   const navigate = useNavigate()
-  const [status, setStatus] = useState({
+  const [status, setStatus] = useState<GuardStatus>({
     checking: requireAuthStatus, // 强限制路由需要先校验
     blocked: false,
   })

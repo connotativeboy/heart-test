@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchTestDetail } from '../api/api'
 import AuthModal from './AuthModal'
+import type { TestDetail } from '../types'
 
 /**
  * 测评介绍页组件（公开路由，独立沉浸式展示页，无导航栏/免责声明）
@@ -10,9 +11,9 @@ import AuthModal from './AuthModal'
  * - 点击【开始测试】弹出授权码模态框，验证通过后进入答题页
  */
 export default function TestIntro() {
-  const { testId } = useParams()
+  const { testId = '' } = useParams()
   const navigate = useNavigate()
-  const [detail, setDetail] = useState(null)
+  const [detail, setDetail] = useState<TestDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showAuth, setShowAuth] = useState(false)
@@ -26,11 +27,11 @@ export default function TestIntro() {
       .then((res) => {
         if (cancelled) return
         // 兼容后端返回 { data: {...} } 或直接对象
-        setDetail(res && res.data ? res.data : res)
+        setDetail(res && res.data ? res.data : (res as unknown as TestDetail))
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err.message || '加载测评信息失败')
+        setError(err instanceof Error ? err.message : '加载测评信息失败')
       })
       .finally(() => {
         if (!cancelled) setLoading(false)

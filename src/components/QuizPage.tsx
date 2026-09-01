@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchQuiz, submitAnswer } from '../api/api'
+import type { AnswerItem, Question, QuestionOption } from '../types'
 
 /**
  * 答题页面组件（强限制路由，由 AuthGuard 校验授权码状态）
@@ -9,12 +10,12 @@ import { fetchQuiz, submitAnswer } from '../api/api'
  * - 全部答完后【提交答案】，调用后端接口并跳转结果报告页
  */
 export default function QuizPage() {
-  const { testId } = useParams()
+  const { testId = '' } = useParams()
   const navigate = useNavigate()
 
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState<Question[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState({}) // { questionId: selectedOption }
+  const [answers, setAnswers] = useState<Record<string, string>>({}) // { questionId: selectedOption }
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -34,7 +35,7 @@ export default function QuizPage() {
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err.message || '加载题目失败')
+        setError(err instanceof Error ? err.message : '加载题目失败')
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -48,11 +49,12 @@ export default function QuizPage() {
   const total = questions.length
   const current = questions[currentIndex]
   const isLast = currentIndex === total - 1
-  const allAnswered = total > 0 && questions.every((q) => answers[q.id] !== undefined)
+  const allAnswered =
+    total > 0 && questions.every((q) => answers[String(q.id)] !== undefined)
 
-  const handleSelect = (option) => {
+  const handleSelect = (option: string) => {
     if (!current) return
-    setAnswers((prev) => ({ ...prev, [current.id]: option }))
+    setAnswers((prev) => ({ ...prev, [String(current.id)]: option }))
   }
 
   const handleNext = () => {
@@ -69,14 +71,14 @@ export default function QuizPage() {
     setError('')
     try {
       // 将 answers 对象转换为数组 [{ questionId, answer }]
-      const answerList = questions.map((q) => ({
+      const answerList: AnswerItem[] = questions.map((q) => ({
         questionId: q.id,
-        answer: answers[q.id],
+        answer: answers[String(q.id)],
       }))
       await submitAnswer(testId, answerList)
       navigate(`/result/${testId}`, { replace: true })
     } catch (err) {
-      setError(err.message || '提交失败，请重试')
+      setError(err instanceof Error ? err.message : '提交失败，请重试')
       setSubmitting(false)
     }
   }
@@ -108,9 +110,9 @@ export default function QuizPage() {
         <h2 className="quiz-question">{current.title || current.question}</h2>
 
         {(current.options || []).map((option) => {
-          const value = typeof option === 'object' ? option.value : option
-          const label = typeof option === 'object' ? option.label : option
-          const selected = answers[current.id] === value
+          const value = typeof option === 'object' ? (option as QuestionOption).value : option
+          const label = typeof option === 'object' ? (option as QuestionOption).label : option
+          const selected = answers[String(current.id)] === value
           return (
             <button
               key={value}

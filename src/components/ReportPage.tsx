@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchReport } from '../api/api'
+import type { Report } from '../types'
 
 /**
  * 结果报告页组件
@@ -9,9 +10,9 @@ import { fetchReport } from '../api/api'
  * - 返回测评列表按钮，可重复查看报告
  */
 export default function ReportPage() {
-  const { testId } = useParams()
+  const { testId = '' } = useParams()
   const navigate = useNavigate()
-  const [report, setReport] = useState(null)
+  const [report, setReport] = useState<Report | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -24,11 +25,11 @@ export default function ReportPage() {
       .then((res) => {
         if (cancelled) return
         // 兼容后端返回 { data: {...} } 或直接对象
-        setReport(res && res.data ? res.data : res)
+        setReport(res && res.data ? res.data : (res as unknown as Report))
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err.message || '加载报告失败')
+        setError(err instanceof Error ? err.message : '加载报告失败')
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
