@@ -21,9 +21,13 @@ export interface TestDetail {
 }
 
 // ===== 题目选项 =====
+// score：score-band 类型的分值
+// dims ：profile-match 类型的维度加分，如 { "自由": 3, "社交": 2 }
 export interface QuestionOption {
   value: string
   label: string
+  score?: number
+  dims?: Record<string, number>
 }
 
 // ===== 题目 =====
@@ -40,6 +44,26 @@ export interface AnswerItem {
   answer: string
 }
 
+// ===== 目标物匹配结果（profile-match） =====
+export interface ProfileItem {
+  result_key: string
+  name: string
+  tagline?: string
+  match_percent: number
+  profile?: Record<string, number>
+  copy?: string
+}
+
+export interface MatchResult {
+  result_type: 'score-band' | 'profile-match'
+  score?: number
+  report_content?: string
+  dimensions?: string[]
+  user_profile?: Record<string, number>
+  top?: ProfileItem
+  ranking?: ProfileItem[]
+}
+
 // ===== 报告 =====
 export interface Report {
   testId?: string
@@ -48,6 +72,8 @@ export interface Report {
   content?: string
   result?: string
   description?: string
+  /** profile-match 的标准化匹配结果 */
+  match?: MatchResult
 }
 
 // ===== 后端统一响应结构 =====

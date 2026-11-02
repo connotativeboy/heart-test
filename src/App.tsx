@@ -6,6 +6,7 @@ import TestList from './components/TestList'
 import TestIntro from './components/TestIntro'
 import QuizPage from './components/QuizPage'
 import ReportPage from './components/ReportPage'
+import CityTest from './city/CityTest'
 
 /**
  * 根组件：定义路由表
@@ -31,6 +32,19 @@ export default function App() {
 
       {/* 公开路由：测评介绍页（独立沉浸式，无导航栏/免责声明） */}
       <Route path="/test/:testId" element={<TestIntro />} />
+
+      {/* city-development 专属：沉浸式欢迎 + 答题 + 结果（单路由状态机） */}
+      <Route
+        path="/quiz/city-development"
+        element={
+          <AuthGuard requireAuthStatus>
+            <CityTest />
+          </AuthGuard>
+        }
+      />
+
+      {/* 兼容旧结果地址：统一回到专属视图（由持久化 stage 恢复结果） */}
+      <Route path="/result/city-development" element={<Navigate to="/quiz/city-development" replace />} />
 
       {/* 强限制路由：答题页（token + 授权码状态校验） */}
       <Route

@@ -690,6 +690,171 @@ input {
   line-height: 1.8;
 }
 
+/* ============ 匹配结果报告（profile-match） ============ */
+.match-hero {
+  background: linear-gradient(160deg, #eaf7f0 0%, #ffffff 70%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.match-hero__label {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--text-sub);
+}
+
+.match-hero__name {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary-green-dark);
+  letter-spacing: 2px;
+  margin: 8px 0 4px;
+}
+
+.match-hero__percent {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.match-hero__num {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--primary-green);
+}
+
+.match-hero__unit {
+  font-size: 14px;
+  color: var(--text-sub);
+}
+
+.match-hero__tagline {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--primary-green-dark);
+  background: var(--primary-green-light);
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.match-hero__copy {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-main);
+  white-space: pre-wrap;
+  text-align: left;
+  margin-top: 6px;
+}
+
+.match-section {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.match-section__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  margin-bottom: 16px;
+  padding-left: 10px;
+  border-left: 4px solid var(--primary-green);
+}
+
+.match-bar {
+  margin-bottom: 14px;
+}
+
+.match-bar:last-child {
+  margin-bottom: 0;
+}
+
+.match-bar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+
+.match-bar__track {
+  height: 8px;
+  background: var(--bg-light);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.match-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary-green), var(--primary-green-dark));
+  transition: width 0.4s ease;
+}
+
+.match-ranking {
+  list-style: none;
+}
+
+.match-ranking__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 14px;
+}
+
+.match-ranking__item:last-child {
+  border-bottom: none;
+}
+
+.match-ranking__rank {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-light);
+  color: var(--text-sub);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.match-ranking__item--top .match-ranking__rank {
+  background: var(--primary-green);
+  color: #fff;
+}
+
+.match-ranking__name {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.match-ranking__tagline {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+.match-ranking__percent {
+  font-weight: 700;
+  color: var(--primary-green-dark);
+}
+
 /* ============ 响应式适配 ============ */
 @media (max-width: 480px) {
   .app-main {
@@ -744,5 +909,24 @@ input {
 
   .landing-notice {
     padding: 20px;
+  }
+}
+
+/* 匹配结果移动端适配 */
+@media (max-width: 480px) {
+  .match-hero {
+    padding: 22px 18px;
+  }
+
+  .match-hero__name {
+    font-size: 26px;
+  }
+
+  .match-hero__num {
+    font-size: 34px;
+  }
+
+  .match-ranking__tagline {
+    display: none;
   }
 }
