@@ -6,6 +6,7 @@ import TestList from './components/TestList'
 import TestIntro from './components/TestIntro'
 import QuizPage from './components/QuizPage'
 import ReportPage from './components/ReportPage'
+import ScrollToTop from './components/ScrollToTop'
 import CityTest from './city/CityTest'
 
 /**
@@ -16,15 +17,17 @@ import CityTest from './city/CityTest'
  */
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       {/* 公开路由：首页落地页（独立精美落地页，无导航栏/免责声明） */}
       <Route path="/" element={<HomePage />} />
 
-      {/* 公开路由：测评列表页（保留导航栏和免责文案） */}
+      {/* 公开路由：全部测试（杂志风目录） */}
       <Route
         path="/test-list"
         element={
-          <Layout title="探索中心" showBack={false}>
+          <Layout title="" showBack={false}>
             <TestList />
           </Layout>
         }
@@ -72,6 +75,7 @@ export default function App() {
 
       {/* 兜底：未匹配路由重定向首页 */}
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }

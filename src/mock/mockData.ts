@@ -6,7 +6,7 @@ import type { Question, Report, TestDetail, TestItem } from '../types'
  */
 
 // 测评列表（分类、testId、名称、简介）
-export const tests: TestItem[] = [
+const rawTests = [
   // ===== 性格 =====
   {
     testId: 'deep-desire',
@@ -81,6 +81,15 @@ export const tests: TestItem[] = [
     subtitle: '关注你的心理健康',
   },
 ]
+
+export const tests: TestItem[] = rawTests.map((test, index) => ({
+  ...test,
+  status: 'live',
+  question_count: 5,
+  dimensions: [],
+  duration: '约 2 分钟',
+  featured: index === 1,
+}))
 
 // 测评详情（test/:testId）
 export const testDetails: Record<string, TestDetail> = {

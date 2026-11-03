@@ -11,12 +11,10 @@ interface AuthModalProps {
 }
 
 /**
- * 授权码模态框组件
- * - 在测评介绍页点击【开始测评】后弹出
- * - 输入授权码，调用后端 verify-code 校验
- * - 校验通过保存 token 并跳转答题页 /quiz/:testId
- * - 校验失败展示错误提示（无效 / 已使用）
- * - loading 状态防止重复点击
+ * 授权码弹窗（杂志风）
+ * - 调用后端 verify-code 校验
+ * - 通过后保存 token 并跳转答题页
+ * - loading 防重复提交
  */
 export default function AuthModal({ testId, onClose }: AuthModalProps) {
   const navigate = useNavigate()
@@ -31,7 +29,7 @@ export default function AuthModal({ testId, onClose }: AuthModalProps) {
       setError('请输入授权码')
       return
     }
-    if (loading) return // 防止重复点击
+    if (loading) return
 
     setLoading(true)
     setError('')
@@ -44,7 +42,6 @@ export default function AuthModal({ testId, onClose }: AuthModalProps) {
         setError((res && res.msg) || '授权码无效')
       }
     } catch (err) {
-      // 后端返回的错误信息（如授权码无效 / 已使用）
       setError(err instanceof Error ? err.message : '授权码无效')
     } finally {
       setLoading(false)
@@ -52,35 +49,56 @@ export default function AuthModal({ testId, onClose }: AuthModalProps) {
   }
 
   return (
-    <div className="guard-modal" onClick={onClose}>
-      <div className="guard-modal__box" onClick={(e) => e.stopPropagation()}>
-        <h3 className="auth-modal__title">请输入授权码</h3>
-        <p className="auth-modal__subtitle">验证通过后即可开始测评</p>
+    <div className="mag-modal" onClick={onClose}>
+      <div
+        className="mag-modal__box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className="mag-modal__close"
+          onClick={onClose}
+          aria-label="关闭弹窗"
+        >
+          ×
+        </button>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <input
-              className="form-input"
-              type="text"
-              placeholder="请输入授权码"
-              value={authCode}
-              onChange={(e) => setAuthCode(e.target.value)}
-              disabled={loading}
-              autoComplete="off"
-              autoFocus
-            />
-          </div>
+        <p className="mag-modal__kicker">AUTH CODE · 入场券</p>
+        <h3 className="mag-modal__title" id="auth-modal-title">
+          请输入授权码
+        </h3>
+        <p className="mag-modal__sub">验证通过后即可开始测评</p>
 
-          <button className="btn-primary" type="submit" disabled={loading}>
-            {loading ? '验证中...' : '确认'}
+        <form className="mag-modal__form" onSubmit={handleSubmit}>
+          <input
+            className="mag-input"
+            type="text"
+            placeholder="请输入授权码"
+            value={authCode}
+            onChange={(e) => setAuthCode(e.target.value)}
+            disabled={loading}
+            autoComplete="off"
+            autoFocus
+          />
+          <button
+            className="mag-btn mag-btn--primary"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? '验证中...' : '确认进入'}
           </button>
         </form>
 
-        {error && <div className="error-msg">{error}</div>}
+        {error && <div className="mag-error">{error}</div>}
 
-        <button className="auth-modal__close" onClick={onClose}>
-          取消
-        </button>
+        <div className="mag-modal__actions">
+          <button type="button" className="mag-btn mag-btn--ghost" onClick={onClose}>
+            先不测了
+          </button>
+        </div>
       </div>
     </div>
   )

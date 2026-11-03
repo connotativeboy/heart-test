@@ -10,6 +10,11 @@ export interface TestItem {
   name: string
   description: string
   subtitle?: string
+  status: 'live' | 'soon'
+  question_count: number
+  dimensions?: string[]
+  duration?: string
+  featured?: boolean
 }
 
 // ===== 测评详情 =====

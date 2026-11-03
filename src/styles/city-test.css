@@ -103,17 +103,15 @@
   display: flex;
   flex-direction: column;
   padding: 22px 20px 34px;
-  animation: ct-rise 0.45s ease both;
+  animation: ct-fade 0.35s ease both;
 }
 
-@keyframes ct-rise {
+@keyframes ct-fade {
   from {
     opacity: 0;
-    transform: translateY(14px);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 
