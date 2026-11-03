@@ -1440,6 +1440,16 @@ body {
     display: none;
   }
 
+  .mag-doodle--1 {
+    top: 6px;
+    right: 2%;
+    width: 56px;
+  }
+
+  .mag-doodle--3 {
+    display: none;
+  }
+
   .mag-doodle--5 {
     top: 86px;
     width: 64px;
